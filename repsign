@@ -1,0 +1,69 @@
+#! /bin/bash
+#
+#  repsign - 2018-05-28
+#
+#  Replaces "?" with "_" in all file names in the current directory.
+#
+#  Bernd Storck, https://www.facebook.com/BStLinux/
+
+SCRIPTNAME="$(basename "$0")"
+VERSION="1.0.0"
+DIR="."
+SIGN="?"
+NEWSIGN="_"
+
+function hilfe() {
+	echo "$SCRIPTNAME $VERSION"
+	echo
+	echo "AUFRUFVARIANTEN:"
+	echo
+	echo -e "\t1. $SCRIPTNAME"
+	echo -e "\t2. $SCRIPTNAME <ein_Zeichen>"
+	echo -e "\t3. $SCRIPTNAME <ein_Zeichen> <ein_anderes_Zeichen>"
+	echo -e "\t4. $SCRIPTNAME <ein_Pfad> <ein_Zeichen> <ein_anderes_Zeichen>"
+	echo -e "\t5. $SCRIPTNAME -h|--help"
+	echo
+	echo "1. Das Programm ersetzt standardmäßig in den Namen aller Dateien des aktuellen"
+	echo "   Verzeichnisses alle Fragezeichen durch einen Unterstrich."
+	echo
+	echo "2. Wird $SCRIPTNAME mit genau einem einzigem Parameter aufgerufen, mit der"
+	echo "   Angabe eines Zeichens, dann ersetzt $SCRIPTNAME dieses Zeichen durch einen"
+	echo "   Unterstrich."
+	echo 
+	echo "3. Mit zwei Parametern kann man bestimmen welches Zeichen durch welches"
+	echo "   andere Zeichen ersetzt wird."
+	echo
+	echo "4. Bei drei Aufrufparametern bedeutet der erste das Verzeichnis, in dem"
+	echo "   Dateinamen verändert werden sollen, der zweite, welches Zeichen ersetzt"
+	echo "   werden soll, und der dritte, welches andere Zeichen stattdessen eingefügt"
+	echo "   werden soll."
+}
+
+if [ $# -eq 3 ]; then
+	DIR="$1"
+	SIGN="$2"
+	NEWSIGN="$3"
+elif [ $# -eq 2 ]; then
+	SIGN="$1"
+	NEWSIGN="$2"
+elif [ -n "$1" ]; then
+	if [ "$1" = "-h" -o "$1" = "--help" ]; then
+		hilfe
+		exit 0
+	else
+		SIGN="$1"
+	fi
+fi
+
+
+for OLDNAME in ${DIR}/*;  
+do 
+        if [ "$(grep -Fc "$SIGN" <<< "$OLDNAME")" -ne 0 ]; then
+                NEWNAME=$(sed "s/${SIGN}/${NEWSIGN}/g" <<< "$OLDNAME")
+                if [ -z "$NEWSIGN" -a "$(basename "$OLDNAME" | wc -m)" -le 2 ]; then
+                	echo "Error: Can not replace file name \"$OLDNAME\" by nothing." > /dev/stderr
+                	continue  # File name of only one sign can not be replaced by nothing.
+                fi
+               	mv -v "$OLDNAME" "$NEWNAME"
+        fi
+done
