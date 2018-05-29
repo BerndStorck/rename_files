@@ -1,6 +1,6 @@
 #! /bin/bash
 #
-#  repsign - 2018-05-28
+#  repsign - 2018-05-29[B
 #
 #  Replaces "?" with "_" in all file names in the current directory.
 #
@@ -60,8 +60,6 @@ for OLDNAME in ${DIR}/*;
 do 
         if [ "$(grep -Fc "$SIGN" <<< "$OLDNAME")" -ne 0 ]; then
                 NEWNAME=$(sed "s/${SIGN}/${NEWSIGN}/g" <<< "$OLDNAME")
-                # basename "$OLDNAME"
-                # echo "Enthält nur das zu ersetzende Zeichen = " "$(grep -Fc [^${SIGN}] <<< $(basename ${OLDNAME})"
                 if [ -z "$NEWSIGN" -a "$( grep -c "[^${SIGN}\.]" <<< "$(basename "${OLDNAME}")" )" -eq 0 ]; then
                 	echo "Error: Can not replace file name \"$OLDNAME\" by nothing or \"$NEWNAME\"." > /dev/stderr
                 	continue  # File name of only one sign can not be replaced by nothing.
