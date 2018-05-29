@@ -29,5 +29,5 @@ Obwohl das Umbenennungskommando `mv` eine solche Umbenennung gar nicht durchfüh
 
 ## Feedback erwünscht
 
-Obwohl ich das kleine Programm getestet habe und es voraussichtlich problemlos seine Aufgabe erfüllt, muss ich zugeben, dass ich es in seiner jetzigen Form für unelegant halte. Ich bin neugierig, ob jemand eine andere sinnvollere oder geschicktere Vorgehensweise vorschlägt und bitte, um konstruktives Feedback,. Sowohl für andere Lösungen mit einem Bash-Script als auch mit anderen Programmiersprachen würde ich gerne sehen.
+Obwohl ich das kleine Programm getestet habe und es voraussichtlich problemlos seine Aufgabe erfüllt, muss ich zugeben, dass ich es in seiner jetzigen Form für unelegant halte. Ich bin neugierig, ob jemand eine andere sinnvollere oder geschicktere Vorgehensweise vorschlägt und bitte, um konstruktives Feedback. Andere Lösungen sowohl mit einem Bash-Script als auch mit anderen Programmiersprachen würde ich gerne sehen.
 
