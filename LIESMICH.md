@@ -12,7 +12,7 @@ Eine genauere Beschreibung der Aufgabe und der Probleme dieses kleinen Shell-Scr
 4. `repsign <ein_Pfad> <ein_Zeichen> <ein_anderes_Zeichen>`
 5. `repsign -h|--help`
 
-
+###Erläuterungen zu den Aufrufvarianten
 
 1. Das Programm ersetzt standardmäßig in den Namen aller Dateien des aktuellen Verzeichnisses alle Fragezeichen durch einen Unterstrich.
 
