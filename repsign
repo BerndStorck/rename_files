@@ -1,13 +1,13 @@
 #! /bin/bash
 #
-#  repsign - 2018-05-29[B
+#  repsign - 2018-05-30
 #
 #  Replaces "?" with "_" in all file names in the current directory.
 #
 #  Bernd Storck, https://www.facebook.com/BStLinux/
 
 SCRIPTNAME="$(basename "$0")"
-VERSION="1.0.1"
+VERSION="1.1.0"
 DIR="."
 SIGN="?"
 NEWSIGN="_"
@@ -64,6 +64,6 @@ do
                 	echo "Error: Can not replace file name \"$OLDNAME\" by nothing or \"$NEWNAME\"." > /dev/stderr
                 	continue  # File name of only one sign can not be replaced by nothing.
                 fi
-               	mv -v "$OLDNAME" "$NEWNAME"
+               	mv -iv "$OLDNAME" "$NEWNAME"
         fi
 done
