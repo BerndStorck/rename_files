@@ -7,7 +7,7 @@
 #  Bernd Storck, https://www.facebook.com/BStLinux/
 
 SCRIPTNAME="$(basename "$0")"
-VERSION="1.0.0"
+VERSION="1.0.1"
 DIR="."
 SIGN="?"
 NEWSIGN="_"
@@ -60,8 +60,10 @@ for OLDNAME in ${DIR}/*;
 do 
         if [ "$(grep -Fc "$SIGN" <<< "$OLDNAME")" -ne 0 ]; then
                 NEWNAME=$(sed "s/${SIGN}/${NEWSIGN}/g" <<< "$OLDNAME")
-                if [ -z "$NEWSIGN" -a "$(basename "$OLDNAME" | wc -m)" -le 2 ]; then
-                	echo "Error: Can not replace file name \"$OLDNAME\" by nothing." > /dev/stderr
+                # basename "$OLDNAME"
+                # echo "Enthält nur das zu ersetzende Zeichen = " "$(grep -Fc [^${SIGN}] <<< $(basename ${OLDNAME})"
+                if [ -z "$NEWSIGN" -a "$( grep -c "[^${SIGN}\.]" <<< "$(basename "${OLDNAME}")" )" -eq 0 ]; then
+                	echo "Error: Can not replace file name \"$OLDNAME\" by nothing or \"$NEWNAME\"." > /dev/stderr
                 	continue  # File name of only one sign can not be replaced by nothing.
                 fi
                	mv -v "$OLDNAME" "$NEWNAME"

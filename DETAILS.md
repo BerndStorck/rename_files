@@ -25,7 +25,7 @@ Würde man ein unerwünschtes Zeichen aus einer großen Anzahl von Dateien jedes
 Obwohl das Umbenennungskommando `mv` eine solche Umbenennung gar nicht durchführen würde, unterbindet repsign dieses Problem auf zwei Arten:
 
 1. repsign löscht standardmäßig kein Zeichen aus den Dateinamen, sondern ersetzt es vorzugsweise durch ein anderes Zeichen. 
-2. repsign gibt den Befehl zum Umbenennen einer Datei nur, wenn der berechnete neue Dateiname nicht leer ist. Obwohl man sogar den Aufruf `repsign "<ein_Zeichen>" ""` benutzen kann, um ein Zeichen doch zu löschen und nicht zu ersetzen, wird repsign nie an `mv` die unsinnige Aufforderung weitergeben, eine Datei auf einen leeren Namen umzubenennen.
+2. repsign gibt den Befehl zum Umbenennen einer Datei nur, wenn der berechnete neue Dateiname nicht leer ist. Obwohl man sogar den Aufruf `repsign "<ein_Zeichen>" ""` benutzen kann, um ein Zeichen doch zu löschen und nicht zu ersetzen, versucht repsign an `mv` nie die unsinnige Aufforderung weiterzugeben, eine Datei auf einen leeren Namen umzubenennen.
 
 ## Feedback erwünscht
 
