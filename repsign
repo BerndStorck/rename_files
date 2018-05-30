@@ -13,30 +13,56 @@ SIGN="?"
 NEWSIGN="_"
 
 function hilfe() {
-	echo "$SCRIPTNAME $VERSION"
-	echo
-	echo "AUFRUFVARIANTEN:"
-	echo
-	echo -e "\t1. $SCRIPTNAME"
-	echo -e "\t2. $SCRIPTNAME <ein_Zeichen>"
-	echo -e "\t3. $SCRIPTNAME <ein_Zeichen> <ein_anderes_Zeichen>"
-	echo -e "\t4. $SCRIPTNAME <ein_Pfad> <ein_Zeichen> <ein_anderes_Zeichen>"
-	echo -e "\t5. $SCRIPTNAME -h|--help"
-	echo
-	echo "1. Das Programm ersetzt standardmäßig in den Namen aller Dateien des aktuellen"
-	echo "   Verzeichnisses alle Fragezeichen durch einen Unterstrich."
-	echo
-	echo "2. Wird $SCRIPTNAME mit genau einem einzigem Parameter aufgerufen, mit der"
-	echo "   Angabe eines Zeichens, dann ersetzt $SCRIPTNAME dieses Zeichen durch einen"
-	echo "   Unterstrich."
-	echo 
-	echo "3. Mit zwei Parametern kann man bestimmen welches Zeichen durch welches"
-	echo "   andere Zeichen ersetzt wird."
-	echo
-	echo "4. Bei drei Aufrufparametern bedeutet der erste das Verzeichnis, in dem"
-	echo "   Dateinamen verändert werden sollen, der zweite, welches Zeichen ersetzt"
-	echo "   werden soll, und der dritte, welches andere Zeichen stattdessen eingefügt"
-	echo "   werden soll."
+        if [ "$(echo "$LANG" | cut -c 1-2)" == "de" ]; then
+
+		echo "$SCRIPTNAME $VERSION"
+		echo
+		echo "AUFRUFVARIANTEN:"
+		echo
+		echo -e "\t1. $SCRIPTNAME"
+		echo -e "\t2. $SCRIPTNAME <ein_Zeichen>"
+		echo -e "\t3. $SCRIPTNAME <ein_Zeichen> <ein_anderes_Zeichen>"
+		echo -e "\t4. $SCRIPTNAME <ein_Pfad> <ein_Zeichen> <ein_anderes_Zeichen>"
+		echo -e "\t5. $SCRIPTNAME -h|--help"
+		echo
+		echo "1. Das Programm ersetzt standardmäßig in den Namen aller Dateien des aktuellen"
+		echo "   Verzeichnisses alle Fragezeichen durch einen Unterstrich."
+		echo
+		echo "2. Wird $SCRIPTNAME mit genau einem einzigem Parameter aufgerufen, mit der"
+		echo "   Angabe eines Zeichens, dann ersetzt $SCRIPTNAME dieses Zeichen durch einen"
+		echo "   Unterstrich."
+		echo 
+		echo "3. Mit zwei Parametern kann man bestimmen welches Zeichen durch welches"
+		echo "   andere Zeichen ersetzt wird."
+		echo
+		echo "4. Bei drei Aufrufparametern bedeutet der erste das Verzeichnis, in dem"
+		echo "   Dateinamen verändert werden sollen, der zweite, welches Zeichen ersetzt"
+		echo "   werden soll, und der dritte, welches andere Zeichen stattdessen eingefügt"
+		echo "   werden soll."
+	else
+		echo "$SCRIPTNAME $VERSION"
+		echo
+		echo "CALLS:"
+		echo
+		echo -e "\t1. $SCRIPTNAME"
+		echo -e "\t2. $SCRIPTNAME <one_character>"
+		echo -e "\t3. $SCRIPTNAME <string> <an_other_string>"
+		echo -e "\t4. $SCRIPTNAME <path> <string> <an_other_string>"
+		echo -e "\t5. $SCRIPTNAME -h|--help"
+		echo
+		echo "1. By default, the program replaces all question marks with an underscore in all"
+		echo "   file names in the current directory."
+		echo
+		echo "2. If $SCRIPTNAME is called with exactly one parameter, one single character, it "
+		echo "   will replace that character with an underscore."
+		echo 
+		echo "3. With two parameters you can decide, which string should be replaced with which"
+		echo "   other text string."
+		echo
+		echo "4. If you are using three parameters, then the first is the directory, in which"
+		echo "   file names should be changed, the second says, which string should be"
+		echo "   replaced, and the third says, which other string should be inserted instead."
+	fi
 }
 
 if [ $# -eq 3 ]; then
