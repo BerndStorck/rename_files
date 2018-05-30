@@ -8,88 +8,93 @@
 
 SCRIPTNAME="$(basename "$0")"
 VERSION="1.1.1"
+
+# Defaults
 DIR="."
 SIGN="?"
 NEWSIGN="_"
 
 function hilfe() {
-        if [ "$(echo "$LANG" | cut -c 1-2)" == "de" ]; then
+        if [ "${LANG::2}" == "de" ]; then
 
-		echo "$SCRIPTNAME $VERSION"
-		echo
-		echo "AUFRUFVARIANTEN:"
-		echo
-		echo -e "\t1. $SCRIPTNAME"
-		echo -e "\t2. $SCRIPTNAME <ein_Zeichen>"
-		echo -e "\t3. $SCRIPTNAME <ein_Zeichen> <ein_anderes_Zeichen>"
-		echo -e "\t4. $SCRIPTNAME <ein_Pfad> <ein_Zeichen> <ein_anderes_Zeichen>"
-		echo -e "\t5. $SCRIPTNAME -h|--help"
-		echo
-		echo "1. Das Programm ersetzt standardmäßig in den Namen aller Dateien des aktuellen"
-		echo "   Verzeichnisses alle Fragezeichen durch einen Unterstrich."
-		echo
-		echo "2. Wird $SCRIPTNAME mit genau einem einzigem Parameter aufgerufen, mit der"
-		echo "   Angabe eines Zeichens, dann ersetzt $SCRIPTNAME dieses Zeichen durch einen"
-		echo "   Unterstrich."
-		echo 
-		echo "3. Mit zwei Parametern kann man bestimmen welches Zeichen durch welches"
-		echo "   andere Zeichen ersetzt wird."
-		echo
-		echo "4. Bei drei Aufrufparametern bedeutet der erste das Verzeichnis, in dem"
-		echo "   Dateinamen verändert werden sollen, der zweite, welches Zeichen ersetzt"
-		echo "   werden soll, und der dritte, welches andere Zeichen stattdessen eingefügt"
-		echo "   werden soll."
-	else
-		echo "$SCRIPTNAME $VERSION"
-		echo
-		echo "CALLS:"
-		echo
-		echo -e "\t1. $SCRIPTNAME"
-		echo -e "\t2. $SCRIPTNAME <one_character>"
-		echo -e "\t3. $SCRIPTNAME <string> <another_string>"
-		echo -e "\t4. $SCRIPTNAME <path> <string> <another_string>"
-		echo -e "\t5. $SCRIPTNAME -h|--help"
-		echo
-		echo "1. By default, the program replaces all question marks with an underscore in all"
-		echo "   file names in the current directory."
-		echo
-		echo "2. If $SCRIPTNAME is called with exactly one parameter, one single character, it "
-		echo "   will replace that character with an underscore."
-		echo 
-		echo "3. With two parameters you can decide, which string should be replaced with which"
-		echo "   other text string."
-		echo
-		echo "4. If you are using three parameters, then the first is the directory, in which"
-		echo "   file names should be changed, the second says, which string should be"
-		echo "   replaced, and the third says, which other string should be inserted instead."
-	fi
+                echo "$SCRIPTNAME $VERSION"
+                echo
+                echo "AUFRUFVARIANTEN:"
+                echo
+                echo -e "\t1. $SCRIPTNAME"
+                echo -e "\t2. $SCRIPTNAME "
+                echo -e "\t3. $SCRIPTNAME  "
+                echo -e "\t4. $SCRIPTNAME   "
+                echo -e "\t5. $SCRIPTNAME -h|--help"
+                echo
+                echo "1. Das Programm ersetzt standardmäßig in den Namen aller Dateien des aktuellen"
+                echo "   Verzeichnisses alle Fragezeichen durch einen Unterstrich."
+                echo
+                echo "2. Wird $SCRIPTNAME mit genau einem einzigem Parameter aufgerufen, mit der"
+                echo "   Angabe eines Zeichens, dann ersetzt $SCRIPTNAME dieses Zeichen durch einen"
+                echo "   Unterstrich."
+                echo
+                echo "3. Mit zwei Parametern kann man bestimmen welches Zeichen durch welches"
+                echo "   andere Zeichen ersetzt wird."
+                echo
+                echo "4. Bei drei Aufrufparametern bedeutet der erste das Verzeichnis, in dem"
+                echo "   Dateinamen verändert werden sollen, der zweite, welches Zeichen ersetzt"
+                echo "   werden soll, und der dritte, welches andere Zeichen stattdessen eingefügt"
+                echo "   werden soll."
+        else
+                echo "$SCRIPTNAME $VERSION"
+                echo
+                echo "CALLS:"
+                echo
+                echo -e "\t1. $SCRIPTNAME"
+                echo -e "\t2. $SCRIPTNAME "
+                echo -e "\t3. $SCRIPTNAME  "
+                echo -e "\t4. $SCRIPTNAME   "
+                echo -e "\t5. $SCRIPTNAME -h|--help"
+                echo
+                echo "1. By default, the program replaces all question marks with an underscore in all"
+                echo "   file names in the current directory."
+                echo
+                echo "2. If $SCRIPTNAME is called with exactly one parameter, one single character, it "
+                echo "   will replace that character with an underscore."
+                echo
+                echo "3. With two parameters you can decide, which string should be replaced with which"
+                echo "   other text string."
+                echo
+                echo "4. If you are using three parameters, then the first is the directory, in which"
+                echo "   file names should be changed, the second says, which string should be"
+                echo "   replaced, and the third says, which other string should be inserted instead."
+        fi
+        exit 0
 }
 
 if [ $# -eq 3 ]; then
-	DIR="$1"
-	SIGN="$2"
-	NEWSIGN="$3"
+        DIR="$1"
+        SIGN="$2"
+        NEWSIGN="$3"
 elif [ $# -eq 2 ]; then
-	SIGN="$1"
-	NEWSIGN="$2"
+        SIGN="$1"
+        NEWSIGN="$2"
 elif [ -n "$1" ]; then
-	if [ "$1" = "-h" -o "$1" = "--help" ]; then
-		hilfe
-		exit 0
-	else
-		SIGN="$1"
-	fi
+        if [ "$1" = "-h" ] || [ "$1" = "--help" ]; then
+                hilfe
+        else
+                SIGN="$1"
+        fi
+else
+        hilfe
 fi
 
 
-for OLDNAME in ${DIR}/*;  
-do 
-        if [ "$(grep -Fc "$SIGN" <<< "$OLDNAME")" -ne 0 ]; then
-                NEWNAME=$(sed "s/${SIGN}/${NEWSIGN}/g" <<< "$OLDNAME")
-                if [ -z "$NEWSIGN" -a "$( grep -c "[^${SIGN}\.]" <<< "$(basename "${OLDNAME}")" )" -eq 0 ]; then
-                	echo "Error: Can not replace file name \"$OLDNAME\" by nothing or \"$NEWNAME\"." > /dev/stderr
-                	continue  # File name of only one sign can not be replaced by nothing.
+( cd $DIR && for OLDNAME in *; do
+        # Skip if OLDNAME is not a file
+        [[ -f $OLDNAME ]] || continue
+        if grep -Fcqs "$SIGN" <<< "$OLDNAME"; then
+                NEWNAME=${OLDNAME//$SIGN/$NEWSIGN}
+                if [ ${#NEWNAME} -lt 1 ]; then
+                        >&2 echo "Error: Cannot replace file name \"$OLDNAME\" by \"$NEWNAME\""
+                        continue  # File name of only one sign can not be replaced by nothing.
                 fi
-               	mv -iv "$OLDNAME" "$NEWNAME"
+                mv -iv "$OLDNAME" "$NEWNAME"
         fi
-done
+done )
