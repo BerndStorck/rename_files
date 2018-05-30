@@ -1,4 +1,4 @@
-# repsign 1.0.1
+# repsign 1.1.0
 
 Obwohl ich dieses Shell-Script getestet habe und es meiner Ansicht nach einigermaßen solide arbeitet, rate ich dazu, von den zu manipulierenden Dateien, sofern sie wichtig und unersetzlich sind, Sicherungskopien zu erstellen, bevor man sie umbenennt. 
 
@@ -8,8 +8,8 @@ Eine genauere Beschreibung der Aufgabe und der Probleme dieses kleinen Shell-Scr
 
 1. `repsign`
 2. `repsign <ein_Zeichen>`
-3. `repsign <ein_Zeichen> <ein_anderes_Zeichen>`
-4. `repsign <ein_Pfad> <ein_Zeichen> <ein_anderes_Zeichen>`
+3. `repsign <eine_Zeichenfolge> <eine_andere_Zeichenfolge>`
+4. `repsign <ein_Pfad> <eine_Zeichenfolge> <eine_andere_Zeichenfolge>`
 5. `repsign -h|--help`
 
 ###Erläuterungen zu den Aufrufvarianten
@@ -18,9 +18,9 @@ Eine genauere Beschreibung der Aufgabe und der Probleme dieses kleinen Shell-Scr
 
 2. Wird repsign mit genau einem einzigem Parameter aufgerufen, mit der Angabe eines Zeichens, dann ersetzt repsign dieses Zeichen durch einen Unterstrich.
 
-3. Mit zwei Parametern kann man bestimmen welches Zeichen durch welches andere Zeichen ersetzt wird.
+3. Mit zwei Parametern kann man bestimmen, welche Zeichenfolge durch welche andere Zeichenfolge ersetzt wird.
 
-4. Bei drei Aufrufparametern bedeutet der erste das Verzeichnis, in dem Dateinamen verändert werden sollen, der zweite, welches Zeichen ersetzt werden soll, und der dritte, welches andere Zeichen stattdessen eingefügt werden soll. Solch ein Aufruf kann beispielsweise so aussehen:
+4. Bei drei Aufrufparametern bedeutet der erste das Verzeichnis, in dem Dateinamen verändert werden sollen, der zweite, welche Zeichenfolge ersetzt werden soll, und der dritte, welche andere Zeichenfolge stattdessen eingefügt werden soll. Solch ein Aufruf kann beispielsweise so aussehen:
   
    `repsign /home/rudolf/downloads "ü" "ue"`
 
