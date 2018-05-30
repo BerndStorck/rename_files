@@ -46,8 +46,8 @@ function hilfe() {
 		echo
 		echo -e "\t1. $SCRIPTNAME"
 		echo -e "\t2. $SCRIPTNAME <one_character>"
-		echo -e "\t3. $SCRIPTNAME <string> <an_other_string>"
-		echo -e "\t4. $SCRIPTNAME <path> <string> <an_other_string>"
+		echo -e "\t3. $SCRIPTNAME <string> <another_string>"
+		echo -e "\t4. $SCRIPTNAME <path> <string> <another_string>"
 		echo -e "\t5. $SCRIPTNAME -h|--help"
 		echo
 		echo "1. By default, the program replaces all question marks with an underscore in all"

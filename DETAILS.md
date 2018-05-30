@@ -1,4 +1,4 @@
-# repsign 1.0.0
+# repsign 1.1.1
 
 Beschreibt die Aufgabe des Shell-Skripts repsign, weist auf Probleme hin, die dieser Aufgabe verbunden sind und erklärt den gewählten Lösungsansatz.
 
