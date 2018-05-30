@@ -7,7 +7,7 @@
 #  Bernd Storck, https://www.facebook.com/BStLinux/
 
 SCRIPTNAME="$(basename "$0")"
-VERSION="1.1.0"
+VERSION="1.1.1"
 DIR="."
 SIGN="?"
 NEWSIGN="_"
