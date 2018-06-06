@@ -30,7 +30,7 @@ Dieses Dokument beschreibt  zuerst, wie man das Programm aufruft, und erläutert
 4. `repsign <ein_Pfad> <eine_Zeichenfolge> <eine_andere_Zeichenfolge>`
 5. `repsign -h|--help`
 
-###1.1. Erläuterungen zu den Aufrufvarianten
+### 1.1. Erläuterungen zu den Aufrufvarianten
 
 1. Das Programm ersetzt standardmäßig in den Namen aller Dateien des aktuellen Verzeichnisses alle Fragezeichen durch einen Unterstrich.
 
