@@ -37,6 +37,7 @@ Dieses Dokument beschreibt  zuerst, wie man das Programm aufruft, und erläutert
 2. Wird repsign mit genau einem einzigem Parameter aufgerufen, mit der Angabe eines Zeichens, dann ersetzt repsign dieses Zeichen durch einen Unterstrich.
 
 3. Mit zwei Parametern kann man bestimmen, welche Zeichenfolge durch welche andere Zeichenfolge ersetzt wird.
+
    Auch wenn dies nicht üblich ist, ist es möglich, dass ein Dateiname ein Fragezeichen "?" oder einen Asterisk "*" enthält. repsign kann auch diese Zeichen in Dateinamen ersetzen. Die folgenden beiden Programmaufrufe geben Beispiele für diese Ersetzungsmöglichkeit:
 
    * `repsign '?' _`  würde jedes Fragezeichen im Dateinamen durch einen Unterstrich ersetzen.
