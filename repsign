@@ -10,76 +10,87 @@
 
 # Data for progams self description:
 SCRIPTNAME="$(basename "$0")"
-VERSION="1.2.0"
+VERSION="1.2.1"
 
 # Default values:
 DIR="."
 OLDSIGN="?"
 NEWSIGN="_"
 
-function hilfe() {
+function hilfe {
         if [ "${LANG::2}" = "de" ]; then
 
-		echo -e "$SCRIPTNAME $VERSION \n"
-		
-		echo -e "AUFRUFVARIANTEN: \n"
-		
-		echo -e "\t1. $SCRIPTNAME \n" \
-			"\t2. $SCRIPTNAME <ein_Zeichen> \n" \
-			"\t3. $SCRIPTNAME <Zeichenfolge> <andere_Zeichenfolge> \n" \
-			"\t4. $SCRIPTNAME <Pfad> <Zeichenfolge> <andere_Zeichenfolge> \n" \
-			"\t5. $SCRIPTNAME -h|--help \n"
+cat << _EOT_
 
-		echo -e "1. Das Programm ersetzt standardmäßig in den Namen aller Dateien des \n" \
-			 "  aktuellen Verzeichnisses alle Fragezeichen durch einen Unterstrich. \n" \
-		
-		echo -e "2. Wird $SCRIPTNAME mit genau einem einzigem Parameter aufgerufen, mit der \n" \
-			 "  Angabe eines Zeichens, dann ersetzt $SCRIPTNAME dieses Zeichen durch einen \n" \
-			 "  Unterstrich. \n"
-		
-		echo -e "3. Mit zwei Parametern kann man bestimmen, welches Zeichen durch welches \n" \
-			 "  andere Zeichen ersetzt wird. \n"
-		
-		echo -e "4. Bei drei Aufrufparametern bedeutet der erste das Verzeichnis, in dem \n" \
-			 "  Dateinamen verändert werden sollen, der zweite, welches Zeichen \n" \
-			 "  ersetzt werden soll, und der dritte, welches andere Zeichen stattdessen \n" \
-			 "  eingefügt werden soll. \n"
+ $SCRIPTNAME $VERSION
+
+ AUFRUFVARIANTEN:
+
+    1. $SCRIPTNAME
+    2. $SCRIPTNAME <ein_Zeichen>
+    3. $SCRIPTNAME <Zeichenfolge> <andere_Zeichenfolge>
+    4. $SCRIPTNAME <Pfad> <Zeichenfolge> <andere_Zeichenfolge>
+    5. $SCRIPTNAME -h|--help
+
+ 1. Das Programm ersetzt standardmäßig in den Namen aller Dateien des
+    aktuellen Verzeichnisses alle Fragezeichen durch einen Unterstrich.
+
+ 2. Wird $SCRIPTNAME mit genau einem einzigem Parameter aufgerufen, mit der
+    Angabe eines Zeichens, dann ersetzt $SCRIPTNAME dieses Zeichen durch einen
+    Unterstrich.
+
+ 3. Mit zwei Parametern kann man bestimmen, welches Zeichen durch welches
+    andere Zeichen ersetzt wird.
+
+ 4. Bei drei Aufrufparametern bedeutet der erste das Verzeichnis, in dem
+    Dateinamen verändert werden sollen, der zweite, welches Zeichen
+    ersetzt werden soll, und der dritte, welches andere Zeichen stattdessen
+    eingefügt werden soll.
+
+_EOT_
+
 	else
-		echo -e "$SCRIPTNAME $VERSION \n"
-		
-		echo -e "CALLS: \n"
-		
-		echo -e "\t1. $SCRIPTNAME \n" \
-			"\t2. $SCRIPTNAME <one_character> \n" \
-			"\t3. $SCRIPTNAME <string> <another_string> \n" \
-			"\t4. $SCRIPTNAME <path> <string> <another_string> \n" \
-			"\t5. $SCRIPTNAME -h|--help \n" 
-		
-		echo -e "1. By default, the program replaces all wuestion marks with an under- \n" \
-			 "  score in all file names in the current directory. \n"
 
-		echo -e "2. If $SCRIPTNAME is called with exactly one parameter, one single \n" \
-			 "  character, it will replace that character with an underscore. \n"
-		
-		echo -e "3. With two parameters you can decide, which string should be replaced \n" \
-			 "  with which other text string. \n"
-		
-		echo -e "4. If you are using three parameters, then the first is the directory, \n" \
-			 "  in which should be changed, the second says, which string should \n" \
-		 	 "  be replaced, and the third says, which other string should be \n" \
-			 "  inserted instead. \n"
+cat << _EOT_
+
+ $SCRIPTNAME $VERSION
+
+ CALLS:
+
+     1. $SCRIPTNAME
+     2. $SCRIPTNAME <one_character>
+     3. $SCRIPTNAME <string> <another_string>
+     4. $SCRIPTNAME <path> <string> <another_string>
+     5. $SCRIPTNAME -h|--help
+
+ 1. By default, the program replaces all wuestion marks with an under-
+    score in all file names in the current directory.
+
+ 2. If $SCRIPTNAME is called with exactly one parameter, one single
+    character, it will replace that character with an underscore.
+
+ 3. With two parameters you can decide, which string should be replaced
+    with which other text string.
+
+ 4. If you are using three parameters, then the first is the directory,
+    in which should be changed, the second says, which string should
+    be replaced, and the third says, which other string should be
+    inserted instead.
+
+_EOT_
 	fi
+
 	exit 0
 }
 
 
-function mask_signs() {
+function mask_signs {
 	REPLSIGN="${OLDSIGN//\?/\\\?}"
-	REPLSIGN="${REPLSIGN//\*/\\\*}"	
+	REPLSIGN="${REPLSIGN//\*/\\\*}"
 }
 
 
-function check_directory_existence() {
+function check_directory_existence {
 	if [ ! -d "$DIR" ]; then
 		echo "Error: Could not find a directory \"$DIR\"." 2> /dev/stderr
 		echo -e "\nPondering this point against my passionately fullfilled mission to rename files, I decided -- I decided not to rename files in a non-existing directory. I'm really sorry." 2> /dev/stderr
@@ -97,11 +108,12 @@ elif [ $# -eq 2 ]; then
 	OLDSIGN="$1"
 	NEWSIGN="$2"
 elif [ -n "$1" ]; then
-	if [ "$1" = "-h" -o "$1" = "--help" ]; then
-		hilfe
-	else
-		OLDSIGN="$1"
-	fi
+	case "$1" in
+		-h|--help|--hilf|-help|-hilf)
+			hilfe;;
+		*)
+			OLDSIGN="$1";;
+	esac
 else
         if [ "${LANG::2}" = "de" ]; then
 		ASK="Sollen Fragezeichen in den Dateinamen durch einen Unterstrich ersetzt werden? [j|n]: "
@@ -111,7 +123,7 @@ else
 		EXITMSG="Canceled by user."
 	fi
 	while : ;
-	do	
+	do
 		read -p "$ASK"
 		case "$REPLY" in
 			j|J|y|Y)
@@ -124,12 +136,12 @@ else
 				;;
 		esac
 	done
-		
+
 fi
 
 
-( cd "$DIR"; for OLDNAME in *;  
-do 
+( cd "$DIR"; for OLDNAME in *;
+do
 	[[ -f "$OLDNAME" ]] || continue  # If no normal file, then do not manipulate it.
         if grep -Fcqs "$OLDSIGN" <<< "$OLDNAME"; then
 		if grep -cqs "[*?]" <<< "$OLDSIGN"; then
