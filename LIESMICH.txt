@@ -74,7 +74,7 @@ INHALT
    stattdessen eingefügt werden soll.  Solch ein Aufruf kann beispielsweise
    so aussehen:
   
-   repsign /home/rudolf/downloads "ü" "ue"
+     repsign /home/rudolf/downloads "ü" "ue"
 
    Dieses Beispiel zeigt, dass repsign die Pfadangabe ohne abschließenden
    Slash erwartet, und demonstriert zudem, dass repsign ein Zeichen auch
