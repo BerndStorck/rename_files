@@ -2,7 +2,7 @@
 
 repsign replaces one single character or a text string with another character or text string in the names of all files in a given directory. By default, it will replace all quotation marks in the file names with an underscore in the names of all files in the current working directory.
 
-## Calls
+## 1. Calls
 
 1. `repsign`
 2. `repsign <one_character>`
@@ -10,20 +10,33 @@ repsign replaces one single character or a text string with another character or
 4. `repsign <path> <one_string> <another_string>`
 5. `repsign -h|--help`
 
-### Explanation of Calls
+### 1.1. Explanation of Calls
 
-**Call the programm with `repsign --help` to get more information.**
+1. By default, the program replaces all question marks with an underscore in all file names in the current directory. 
+2. If repsign is called with exactly one parameter, one single 
+   character, it will replace that character with an underscore. 
+3. With two parameters you can decide, which string should be replaced 
+   with which other text string. 
+- `repsign '?' _`  would replace any question mark in the file names by an underscore.
+   - `repsign '*' -` would replace any asterisk in file names by a minus.
+4. If you are using three parameters, then the first is the directory, 
+   in which should be changed, the second says, which string should 
+   be replaced, and the third says, which other string should be 
+   inserted instead. Such a call can look like the following:
+   - `repsign /home/rudolf/downloads "ü" "ue"`
 
-### Special Replacements
+This example shows that repsign expects the path specification without a concluding slash, and also demonstrates that repsign can replace one character by several.
+
+### 1.2. Special Replacements
 
 You can replace questions marks "?" in file names for example by:
 
 ```shell
-`repsign '?' _`
+repsign '?' _
 ```
 
 You can replace asterisks "*" in file names for example by:
 
 ```shell
-`repsign '*' -`
+repsign '*' -
 ```
