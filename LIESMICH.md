@@ -1,8 +1,14 @@
-# repsign 1.2.0
+# repsign 1.2.2
 
 Obwohl ich dieses Shell-Script getestet habe und es meiner Ansicht nach einigermaßen solide arbeitet, rate ich dazu, von den zu manipulierenden Dateien, sofern sie wichtig und unersetzlich sind, Sicherungskopien zu erstellen, bevor man sie umbenennt. 
 
 Dieses Dokument beschreibt  zuerst, wie man das Programm aufruft, und erläutert weiter unten warum ich das Programm so konzipiert habe, wie es ist.
+
+**Alle meine Skripte habe ich mit der unbedingten Absicht geschrieben, deutschsprachigen Anwendern den Zugang zu Linux so weit als möglich zu erleichtern.** Deshalb haben alle meine Skripte eine deutschsprachige Hilfeseite, die unabhängig von der Systemsprache durch die Option `--hilf` angezeigt werden kann, **für repsign** also durch:
+
+```bash
+repsign --hilf
+```
 
 ## Inhalt
 
@@ -28,7 +34,7 @@ Dieses Dokument beschreibt  zuerst, wie man das Programm aufruft, und erläutert
 2. `repsign <ein_Zeichen>`
 3. `repsign <eine_Zeichenfolge> <eine_andere_Zeichenfolge>`
 4. `repsign <ein_Pfad> <eine_Zeichenfolge> <eine_andere_Zeichenfolge>`
-5. `repsign -h|--help`
+5. `repsign --hilf`
 
 ### 1.1. Erläuterungen zu den Aufrufvarianten
 
