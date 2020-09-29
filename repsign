@@ -1,6 +1,6 @@
 #! /bin/bash
 #
-#  repsign - 2018-05-06
+#  repsign - 2018-05-06, 2020-09-29
 #
 #  Replaces "?" with "_" in all file names in the current directory.
 #
@@ -10,16 +10,14 @@
 
 # Data for progams self description:
 SCRIPTNAME="$(basename "$0")"
-VERSION="1.2.1"
+VERSION="1.2.2"
 
 # Default values:
 DIR="."
 OLDSIGN="?"
 NEWSIGN="_"
 
-function hilfe {
-        if [ "${LANG::2}" = "de" ]; then
-
+function hilfe_seite {
 cat << _EOT_
 
  $SCRIPTNAME $VERSION
@@ -30,7 +28,7 @@ cat << _EOT_
     2. $SCRIPTNAME <ein_Zeichen>
     3. $SCRIPTNAME <Zeichenfolge> <andere_Zeichenfolge>
     4. $SCRIPTNAME <Pfad> <Zeichenfolge> <andere_Zeichenfolge>
-    5. $SCRIPTNAME -h|--help
+    5. $SCRIPTNAME --hilf
 
  1. Das Programm ersetzt standardmäßig in den Namen aller Dateien des
     aktuellen Verzeichnisses alle Fragezeichen durch einen Unterstrich.
@@ -48,9 +46,10 @@ cat << _EOT_
     eingefügt werden soll.
 
 _EOT_
+exit 0
+}
 
-	else
-
+function help_page {
 cat << _EOT_
 
  $SCRIPTNAME $VERSION
@@ -78,9 +77,7 @@ cat << _EOT_
     inserted instead.
 
 _EOT_
-	fi
-
-	exit 0
+exit 0
 }
 
 
@@ -109,10 +106,18 @@ elif [ $# -eq 2 ]; then
 	NEWSIGN="$2"
 elif [ -n "$1" ]; then
 	case "$1" in
-		-h|--help|--hilf|-help|-hilf)
-			hilfe;;
-		*)
-			OLDSIGN="$1";;
+        --hilf|--hilfe|-hilf|-hilfe)  # Calls German help regardless of system settings for language.
+            hilfe_seite
+            ;;
+        --help|-h|-help)
+            if [ "${LANG::2}" == "de" ]; then
+                hilfe_seite
+            else
+                help_page
+            fi
+            ;;
+        *)
+           OLDSIGN="$1";;
 	esac
 else
         if [ "${LANG::2}" = "de" ]; then
