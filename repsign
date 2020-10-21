@@ -1,6 +1,6 @@
 #! /bin/bash
 #
-#  repsign - 2018-05-06, 2020-09-29
+#  repsign - 2018-05-06, 2020-09-29, 2020-10-21
 #
 #  Replaces "?" with "_" in all file names in the current directory.
 #
@@ -9,8 +9,9 @@
 #  Version 1.2.0 with thanks to Dennis Tecker, who has checked my former code.
 
 # Data for progams self description:
-SCRIPTNAME="$(basename "$0")"
-VERSION="1.2.2"
+PROG_NAME="repsign"
+SCRIPTNAME="${0##*/}"    ## was: "$(basename "$0")" ## 2020-10-21
+VERSION="1.2.3"
 
 # Default values:
 DIR="."
@@ -115,6 +116,13 @@ elif [ -n "$1" ]; then
             else
                 help_page
             fi
+            ;;
+        --version|-\#)   # For possible bug reports.
+            if [ "$1" = "--version" ]; then
+                echo -n "$PROG_NAME "
+            fi
+            echo "$VERSION"
+            exit 0
             ;;
         *)
            OLDSIGN="$1";;
