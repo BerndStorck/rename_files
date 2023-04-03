@@ -1,14 +1,6 @@
-# repsign 1.2.2
-
-Obwohl ich dieses Shell-Script getestet habe und es meiner Ansicht nach einigermaßen solide arbeitet, rate ich dazu, von den zu manipulierenden Dateien, sofern sie wichtig und unersetzlich sind, Sicherungskopien zu erstellen, bevor man sie umbenennt. 
+# repsign 2.0.0
 
 Dieses Dokument beschreibt  zuerst, wie man das Programm aufruft, und erläutert weiter unten warum ich das Programm so konzipiert habe, wie es ist.
-
-**Alle meine Skripte habe ich mit der unbedingten Absicht geschrieben, deutschsprachigen Anwendern den Zugang zu Linux so weit als möglich zu erleichtern.** Deshalb haben alle meine Skripte eine deutschsprachige Hilfeseite, die unabhängig von der Systemsprache durch die Option `--hilf` angezeigt werden kann, **für repsign** also durch:
-
-```bash
-repsign --hilf
-```
 
 ## Inhalt
 
@@ -30,30 +22,75 @@ repsign --hilf
 
 ## 1. Aufrufvarianten
 
+### 1.1.1. Standardaufrufe
+
 1. `repsign`
-2. `repsign <ein_Zeichen>`
+2. `repsign <ein_Zeichen>`|`<eine_Zeichenfolge>`
 3. `repsign <eine_Zeichenfolge> <eine_andere_Zeichenfolge>`
 4. `repsign <ein_Pfad> <eine_Zeichenfolge> <eine_andere_Zeichenfolge>`
 5. `repsign --hilf`
 
-### 1.1. Erläuterungen zu den Aufrufvarianten
+**Alle meine Skripte habe ich mit der Absicht geschrieben, deutschsprachigen Anwendern den Zugang zu Linux so weit als möglich zu erleichtern.** Deshalb haben alle meine Skripte eine deutschsprachige Hilfeseite, die unabhängig von der Systemsprache durch die Option `--hilf` angezeigt werden kann, **für repsign** also durch:
 
-1. Das Programm ersetzt standardmäßig in den Namen aller Dateien des aktuellen Verzeichnisses alle Fragezeichen durch einen Unterstrich.
+```bash
+repsign --hilf
+```
+### 1.1.2. Nur bestimmte Dateien ändern
+
+6. `repsign <Zeichenfolge> <andere_Zeichenfolge> -f <DATEI> [<DATEI>] …`
+
+6. Wenn der dritte Parameter die Option "-f" ist, werden die darauf folgenden
+    Parameter als eine Liste von Dateien aufgefasst, auf welche die
+    Namensänderungen beschränkt werden sollen.
+
+### 1.1.3. Übersetzungsmodus
+
+7. `repsign -t|--tr|--translate <eine_Zeichenfolge> <eine_andere_Zeichenfolge>`
+8. `repsign <ein_Pfad> -t|--tr|--translate <eine_Zeichenfolge> <eine_andere_Zeichenfolge>`
+
+### 1.1.4. Aufrufvarianten zur Dateisuche
+
+9. `repsign -l|--list|--find`
+10. `repsign --find=abnorm|--find=strange`
+11. `repsign --find='Zeichenkette'`
+
+### 1.2. Erläuterungen zu den Aufrufvarianten
+
+1. Das Programm ersetzt standardmäßig in den Namen aller Dateien des aktuellen Verzeichnisses alle Leerzeichen durch einen Unterstrich.
 
 2. Wird repsign mit genau einem einzigem Parameter aufgerufen, mit der Angabe eines Zeichens, dann ersetzt repsign dieses Zeichen durch einen Unterstrich.
 
 3. Mit zwei Parametern kann man bestimmen, welche Zeichenfolge durch welche andere Zeichenfolge ersetzt wird.
 
-   Auch wenn dies nicht üblich ist, ist es möglich, dass ein Dateiname ein Fragezeichen "?" oder einen Asterisk "*" enthält. repsign kann auch diese Zeichen in Dateinamen ersetzen. Die folgenden beiden Programmaufrufe geben Beispiele für diese Ersetzungsmöglichkeit:
+   Auch wenn dies nicht üblich ist, ist es möglich, dass ein Dateiname ein Fragezeichen "?" oder einen Stern "*" enthält. repsign kann auch diese Zeichen in Dateinamen ersetzen. Die folgenden beiden Programmaufrufe geben Beispiele für diese Ersetzungsmöglichkeit:
 
    * `repsign '?' _`  würde jedes Fragezeichen im Dateinamen durch einen Unterstrich ersetzen.
-   * `repsign '*' -` würde jeden Asterisk im Dateinamen durch ein Minuszeichen ersetzen.
+   * `repsign '*' -` würde jeden Stern im Dateinamen durch ein Minuszeichen ersetzen.
 
 4. Bei drei Aufrufparametern bedeutet der erste das Verzeichnis, in dem Dateinamen verändert werden sollen, der zweite, welche Zeichenfolge ersetzt werden soll, und der dritte, welche andere Zeichenfolge stattdessen eingefügt werden soll. Solch ein Aufruf kann beispielsweise so aussehen:
 
    `repsign /home/rudolf/downloads "ü" "ue"`
 
-   Dieses Beispiel zeigt, dass repsign die Pfadangabe ohne abschließenden Slash erwartet, und demonstriert zudem, dass repsign ein Zeichen auch durch mehrere ersetzen kann.
+   Dieses Beispiel zeigt, dass repsign die Pfadangabe ohne abschließenden Schrägstrich erwartet, und demonstriert zudem, dass repsign ein Zeichen auch durch mehrere ersetzen kann.
+   
+5. Der Aufruf der Hilfe-Seite.
+
+6. Wenn der dritte Parameter die Option "-f" ist, werden die darauf folgenden Parameter als eine Liste von Dateien aufgefasst, auf welche die Namensänderungen beschränkt werden sollen.
+
+7. Ist der erste von insgesamt drei Parameter die Option  `-t`, `--tr` oder `--translate` dann wird jedes Zeichen aus dem zweiten Parameter durch das entsprechende Zeichen aus dem dritten Parameter ersetzt.
+
+   Wenn `<Zeichenmenge_2>` nicht leer und kürzer als `<Zeichenmenge_1>`
+       ist, werden alle überzähligen Zeichen am Ende von `<Zeichenmenge_1>`,
+       für die es keine Entsprechung in `<Zeichenmenge_2>` gibt, durch das
+       letzte Zeichen in `<Zeichenmenge_2>` ersetzt.
+
+8. Bei vier Aufrufparametern bedeutet der erste das Verzeichnis, in dem Dateinamen verändert werden sollen, der zweite muss die Option `-t`, `--tr` oder `--translate` sein. Das Programm wird dann jedes Zeichen aus dem dritten Parameter durch das entsprechende Zeichen des vierten Parameters ersetzen.
+
+9. Ein Aufruf nur mit der Option `-l`, `--list` oder `--find` sucht im aktuellen Verzeichnis und allen seinen Unterverzeichnissen nach Dateien, die ein Leerzeichen enthalten.
+
+10. Der Aufruf `repsign --list=abnorm` sucht im aktuellen Verzeichnis und allen seinen Unterverzeichnissen nach Dateien, deren Name ein unübliches Zeichen enthält.
+
+11. Der Aufruf `repsign --list='<Zeichenkette>'` sucht im aktuellen Verzeichnis und allen seinen Unterverzeichnissen nach Dateien, deren Name die `<Zeichenkette>` enthält.
 
 ## 2. Aufgabenbeschreibung
 
@@ -61,13 +98,11 @@ Beschreibt die Aufgabe des Shell-Skripts repsign, weist auf Probleme hin, die di
 
 ### 2.1. Wahl der Programmiersprache
 
-Sehr wahrscheinlich wäre eine Lösung durch eine maschinennahe Sprache wie C effektiver. Da ich mich jedoch derzeit vor allem mit Bash-Programmierung auseinandersetzen möchte, habe ich das kleine Programme ausschließlich mit den Standardmitteln und üblichen Programmen der bash umgesetzt
+Sehr wahrscheinlich wäre eine Lösung durch eine maschinennahe Sprache wie C effektiver. Da ich mich jedoch derzeit vor allem mit Bash-Programmierung auseinandersetzen möchte, habe ich das kleine Programme ausschließlich mit den Standardmitteln und üblichen Programmen der Bash umgesetzt
 
 ### 2.2. Aufgabe des Shell-Scripts
 
-Das Script sollte ein bestimmtes Zeichen aus Dateinamen löschen und dabei die Dateinamen weitestgehend erhalten.
-
-Ich habe das Programm jedoch so geschrieben, dass es ein bestimmtes Zeichen in Dateinamen ersetzt, anstatt es zu löschen. Warum ich diesen Ansatz gewählt habe, beschreibt der Absatz "Probleme der Programmaufgabe".
+Ich habe die erste Version dieses Programms geschrieben, weil ich eine größere Anzahl von Dateien mit einem Fragezeichen im Dateinamen besaß. Das Script sollte deshalb ein bestimmtes Zeichen aus Dateinamen entfernen und dabei die Dateinamen weitestgehend erhalten. Ich das Programm daher so angelegt, dass es das zu entfernende Zeichen in Dateinamen durch einen Unterstrich ersetzt. Warum ich diesen Ansatz gewählt habe, beschreibt der Absatz "Probleme der Programmaufgabe".
 
 ### 2.3. Probleme der Programmaufgabe
 
@@ -77,14 +112,18 @@ Nach meiner Erfahrung sind Dateinamen, die etwa vormals Umlaute enthielten, und 
 
 #### 2.3.2. Die Unmöglichkeit eines leeren Dateinamens
 
-Würde man ein unerwünschtes Zeichen aus einer großen Anzahl von Dateien jedesmal Löschen, wenn es in einem Dateinamen vorkommt, dann riskiert man den unsinnigen Versuch, eine Datei auf einen leeren Dateinamen umzubenennen. Dies würde genau dann eintreten, wenn ein Dateiname nur aus dem zu löschenden Zeichen zusammengesetzt ist. 
+Würde man ein unerwünschtes Zeichen aus einer großen Anzahl von Dateien jedes Mal Löschen, wenn es in einem Dateinamen vorkommt, dann riskiert man den unsinnigen Versuch, eine Datei auf einen leeren Dateinamen umzubenennen. Dies würde genau dann eintreten, wenn ein Dateiname nur aus dem zu löschenden Zeichen zusammengesetzt ist. 
 
-Obwohl das Umbenennungskommando `mv` eine solche Umbenennung gar nicht durchführen würde, unterbindet repsign dieses Problem auf zwei Arten:
+Obwohl das Umbenennungskommando `mv` keine Datei auf einen leeren Namen umbenennt, unterbindet repsign diese Situation auf zwei Arten:
 
 1. repsign löscht standardmäßig kein Zeichen aus den Dateinamen, sondern ersetzt es vorzugsweise durch ein anderes Zeichen. 
-2. repsign gibt den Befehl zum Umbenennen einer Datei nur, wenn der berechnete neue Dateiname nicht leer ist. Obwohl man sogar den Aufruf `repsign "<ein_Zeichen>" ""` benutzen kann, um ein Zeichen doch zu löschen und nicht zu ersetzen, versucht repsign an `mv` nie die unsinnige Aufforderung weiterzugeben, eine Datei auf einen leeren Namen umzubenennen.
+2. repsign gibt den Befehl zum Umbenennen einer Datei nur, wenn der berechnete neue Dateiname nicht leer ist. Obwohl man sogar den Aufruf `repsign "<ein_Zeichen>" ""` benutzen kann, um ein Zeichen doch zu löschen und nicht zu ersetzen, gibt repsign an  `mv` nie die unsinnige Aufforderung weiter, eine Datei auf einen leeren Namen umzubenennen.
 
 ## Feedback erwünscht
 
-Obwohl ich das kleine Programm getestet habe und es voraussichtlich problemlos seine Aufgabe erfüllt, muss ich zugeben, dass ich es in seiner jetzigen Form für unelegant halte. Ich bin neugierig, ob jemand eine andere sinnvollere oder geschicktere Vorgehensweise vorschlägt und bitte, um konstruktives Feedback. Andere Lösungen sowohl mit einem Bash-Script als auch mit anderen Programmiersprachen würde ich gerne sehen.
+Ich bin neugierig, ob jemand eine andere sinnvollere oder geschicktere Vorgehensweise vorschlägt. Andere Lösungen sowohl mit einem Bash-Script als auch mit anderen Programmiersprachen würde ich gerne sehen.
+
+## Rechtliche Hinweise
+
+Obwohl ich dieses Shell-Script getestet habe und es meiner Ansicht nach einigermaßen solide arbeitet, rate ich dazu, von den zu manipulierenden Dateien, sofern sie wichtig und unersetzlich sind, Sicherungskopien zu erstellen, bevor man sie umbenennt. 
 

@@ -1,6 +1,6 @@
 #! /bin/bash
 #
-#  repsign - 2018-05-06, 2020-09-29, 2020-10-21
+#  repsign - 2018-05-06, 2020-09-29, 2020-10-21, 2020-10-22
 #
 #  Replaces "?" with "_" in all file names in the current directory.
 #
@@ -11,15 +11,15 @@
 # Data for progams self description:
 PROG_NAME="repsign"
 SCRIPTNAME="${0##*/}"    ## was: "$(basename "$0")" ## 2020-10-21
-VERSION="1.2.3"
+VERSION="2.0.0"
 
 # Default values:
 DIR="."
-OLDSIGN="?"
+OLDSIGN=" "
 NEWSIGN="_"
 
-function hilfe_seite {
-cat << _EOT_
+function hilfe_seite { # German help page
+cat | more << _EOT_
 
  $SCRIPTNAME $VERSION
 
@@ -32,7 +32,7 @@ cat << _EOT_
     5. $SCRIPTNAME --hilf
 
  1. Das Programm ersetzt standardmäßig in den Namen aller Dateien des
-    aktuellen Verzeichnisses alle Fragezeichen durch einen Unterstrich.
+    aktuellen Verzeichnisses alle Leerzeichen durch einen Unterstrich.
 
  2. Wird $SCRIPTNAME mit genau einem einzigem Parameter aufgerufen, mit der
     Angabe eines Zeichens, dann ersetzt $SCRIPTNAME dieses Zeichen durch einen
@@ -46,12 +46,60 @@ cat << _EOT_
     ersetzt werden soll, und der dritte, welches andere Zeichen stattdessen
     eingefügt werden soll.
 
+ 5. Anzeige dieser Hilfeseite.
+
+ NUR BESTIMMTE DATEIEN ÄNDERN:
+
+    6. $SCRIPTNAME <Zeichenfolge> <andere_Zeichenfolge> -f <DATEI> [<DATEI>] …
+
+ 6. Wenn der dritte Parameter die Option "-f" ist, werden die folgenden
+    Parameter als eine Liste von Dateien aufgefasst, auf welche die
+    Namensänderungen beschränk werden sollen.
+
+ ÜBERSETZUNGS-MODUS:  (Ähnelt einer Funtktion des Programms tr.)
+
+    7. $SCRIPTNAME -t|--tr|--translate <Zeichenmenge_1> <Zeichenmenge_2>
+    8. $SCRIPTNAME <Pfad> -t <Zeichenmenge_1> <Zeichenmenge_2>
+
+ 7. Ist der erste von insgesamt drei Parameter die Option "-t", "--tr"
+    oder "--translate" dann wird jedes Zeichen aus dem zweiten Parameter
+    durch das entsprechende Zeichen aus dem dritten Parameter ersetzt.
+
+    Wenn <Zeichenmenge_2> nicht leer und kürzer als <Zeichenmenge_1>
+    ist, werden alle überzähligen Zeichen am Ende von <Zeichenmenge_1>,
+    für die es keine Entsprechung in <Zeichenmenge_2> gibt, durch das
+    letzte Zeichen in <Zeichenmenge_2> ersetzt.
+
+ 8. Bei vier Aufrufparametern bedeutet der erste das Verzeichnis, in dem
+    Dateinamen verändert werden sollen, der zweite muss die Option "-t",
+    "--tr" oder "--translate" sein. Das Programm wird dann jedes Zeichen
+    aus dem dritten Parameter durch das entsprechende Zeichen des vierten
+    Parameters ersetzen.
+
+ AUFRUFVARIANTEN ZUR DATEISUCHE:
+
+    9. $SCRIPTNAME -l|--list|--find
+   10. $SCRIPTNAME --find=abnorm|--find=strange
+   11. $SCRIPTNAME --find='Zeichenkette'
+
+ 9. Ein Aufruf nur mit der Option "-l", "--list" oder "--find" sucht im
+    aktuellen Verzeichnis und allen seinen Unterverzeichnissen nach
+    Dateien, die ein Leerzeichen enthalten.
+
+10. Der Aufruf "repsign --list=abnorm" sucht im aktuellen Verzeichnis
+    und allen seinen Unterverzeichnissen nach Dateien, deren Name ein
+    unübliches Zeichen enthält.
+
+11. Der Aufruf "repsign --list='<Zeichenkette>'" sucht im aktuellen
+    Verzeichnis und allen seinen Unterverzeichnissen nach Dateien, deren
+    Name die "<Zeichenkette>" enthält.
+
 _EOT_
 exit 0
 }
 
 function help_page {
-cat << _EOT_
+cat | more << _EOT_
 
  $SCRIPTNAME $VERSION
 
@@ -63,8 +111,8 @@ cat << _EOT_
      4. $SCRIPTNAME <path> <string> <another_string>
      5. $SCRIPTNAME -h|--help
 
- 1. By default, the program replaces all wuestion marks with an under-
-    score in all file names in the current directory.
+ 1. By default, the program replaces all blanks with an underscore in
+    all file names in the current directory.
 
  2. If $SCRIPTNAME is called with exactly one parameter, one single
     character, it will replace that character with an underscore.
@@ -77,96 +125,230 @@ cat << _EOT_
     be replaced, and the third says, which other string should be
     inserted instead.
 
+ 5. Display this help page.
+
+ RENAME ONLY SPECIFIC FILES:
+
+    6. $SCRIPTNAME <string> <another_string> -f <FILE> [<FILE>] …
+
+ 6. If the third parameter is the "-f" option, the following parameters
+    are considered a list of files to which the name changes should be
+    limited.
+
+ TRANSLATE MODE:  (Similar to a function of the program tr.)
+
+     7. $SCRIPTNAME -t|--tr|--translate <char_set1> <char_set2>
+     8. $SCRIPTNAME <path> -t|--tr|--translate <char_set1> <char_set2>
+
+ 7. If the first of in all three parameters is "-t", "--tr" or
+    "--translate" then each character from the second parameter is
+    replaced by the corresponding character from the third parameter.
+
+    If <char_set2> is not empty, but has less characters than
+    <char_set1>, all characters of the <char_set1>, which have no
+    coresponding character in <char_set2>, will be replaced by the last
+    charater of <char_set2>.
+
+ 8. If there are four call parameters, the first means the directory in
+    which file names are to be changed, the second must be the option
+    "-t", "--tr" or "--translate". The program will then replace each
+    character from the third parameter with the corresponding character
+    from the fourth parameter.
+
+ FILE SEARCH:
+
+    9. $SCRIPTNAME -l|--list|--find
+   10. $SCRIPTNAME --find=strange
+   11. $SCRIPTNAME --find='string'
+
+ 9. A call with the option "-l", "--list" or "--find" only will search
+    the current directory and all its subdirectories for files
+    containing a space.
+
+10. The call "repsign --list=strange" searches the current directory and
+    all its subdirectories for files whose name contains an unusual
+    character.
+
+11. The call "repsign --list='<string>'" searches the current directory
+    and all its subdirectories for files whose name contains the
+    "<string>".
+
 _EOT_
 exit 0
 }
 
+function mask_signs { 
+# Masks asterisks and quotation marks, which is necesary for renaming
+# files with an asterisk or a quotation mark in it's name.
+    REPLSIGN="${OLDSIGN//\?/\\\?}"
+    REPLSIGN="${REPLSIGN//\*/\\\*}"
+}
 
-function mask_signs {
-	REPLSIGN="${OLDSIGN//\?/\\\?}"
-	REPLSIGN="${REPLSIGN//\*/\\\*}"
+function check_directory_existence { 
+# Jokes about non-extisting directories and terminates the program if it
+# was started to rename files in a non-existing directory.
+#
+    if [ ! -d "$DIR" ]; then
+        echo "Error: Could not find a directory \"$DIR\"." 2> /dev/stderr
+        echo -e "\nPondering this point against my passionately fullfilled mission to rename files, I decided -- I decided not to rename files in a non-existing directory. I'm really sorry." 2> /dev/stderr
+        exit 1
+    fi
+}
+
+function replace_sign { 
+# Replaces a character or a string in a file name by another charakrer or string.
+#
+        if grep -Fcqs "$OLDSIGN" <<< "$OLDNAME"; then
+        if grep -cqs "[*?]" <<< "$OLDSIGN"; then
+            mask_signs
+        else
+            REPLSIGN="$OLDSIGN"
+        fi
+            NEWNAME=${OLDNAME//$REPLSIGN/$NEWSIGN}
+            if [ ${#NEWNAME} -lt 1 ]; then
+                echo "Error: Can not replace file name \"$OLDNAME\" by \"$NEWNAME\"." > /dev/stderr
+                return  # File name of only one sign can not be replaced by nothing.
+            fi
+               mv -iv "$OLDNAME" "$NEWNAME"
+        fi
+}
+
+function rename_files {
+# Calls the function replace_sign and handles the distiction between
+# normal mode and translation mode.
+#
+    for OLDNAME in "$@"; do
+        [[ -f "$OLDNAME" ]] || continue  # If no normal file, then do not manipulate it.
+        if [ "$MODE" != 'translate' ]; then
+            replace_sign
+        else
+            for ((i=0; i<"${#OLDPILE}"; i++)); do
+                OLDSIGN="${OLDPILE:$i:1}"
+                if [ "$i" -lt "${#NEWPILE}" ]; then
+                    NEWSIGN="${NEWPILE:$i:1}"
+                fi
+                replace_sign
+            done
+        fi
+    done
+}
+
+function handle_numbered_files {
+"hold-copy"
+    
 }
 
 
-function check_directory_existence {
-	if [ ! -d "$DIR" ]; then
-		echo "Error: Could not find a directory \"$DIR\"." 2> /dev/stderr
-		echo -e "\nPondering this point against my passionately fullfilled mission to rename files, I decided -- I decided not to rename files in a non-existing directory. I'm really sorry." 2> /dev/stderr
-		exit 1
-	fi
-}
+### main ######################
 
+# DECISION STRUCTURE 
+# Generally the following decision structure analyses the command by
+# descending number of parameters.  Special options are mostly handled 
+# as exceptions of a call with a specific number or parameters and will
+# be identified first in the decision branch for a special number of
+# parameters.
 
-if [ $# -eq 3 ]; then
-	DIR="$1"
-	check_directory_existence
-	OLDSIGN="$2"
-	NEWSIGN="$3"
+if [ $# -gt 2 ] && [ "$3" = '-f' ]; then
+    MODE="specificated_files"
+    OLDSIGN="$1"
+    NEWSIGN="$2"
+    shift 3
+elif [ $# -eq 4 ] && [ "$2" = '-t' ] || [ "$2" = '--tr' ] || [ "$2" = '--translate' ]; then
+    MODE="translate"
+    DIR="$1"
+    check_directory_existence
+    OLDPILE="$3"
+    NEWPILE="$4"
+elif [ $# -eq 3 ]; then
+    if [ "$1" != '-t' ]; then
+        DIR="$1"
+        check_directory_existence
+        OLDSIGN="$2"
+        NEWSIGN="$3"
+    else
+        MODE="translate"
+        OLDPILE="$2"
+        NEWPILE="$3"
+    fi
 elif [ $# -eq 2 ]; then
-	OLDSIGN="$1"
-	NEWSIGN="$2"
+    OLDSIGN="$1"
+    NEWSIGN="$2"
 elif [ -n "$1" ]; then
-	case "$1" in
+    if [ "$1" = '--find=strange' ] || [ "$1" = '--find=abnorm' ]; then
+        find -L . -type f -exec ls -1 {} \; |\
+        LANG=C grep -E "\/[^/]*[^-_. /~[:alnum:]]+[^/]*$" | more
+        exit 0
+    elif [ "${1:0:7}" = '--find=' ]; then
+        SEARCHED="$(sed 's:^--find=::' <<< "$1")"
+        find -L . -type f -name "*$SEARCHED*" -exec ls -1 {} \; 2> /dev/null |\
+        sed 's:^\./::' | sort | more
+        exit 0
+    elif [ "$1" = '--num=hold-copy' ] || [ "$1" = '--num=backup' ]; then
+        handle_numbered_files "hold-copy"
+        exit 0
+    elif [ "${1:0:6}" = '--num' ] || [ "${1:0:10}" = '--numbers' ] || [ "${1:0:10}" = '--nummern' ]; then
+        handle_numbered_files
+        exit 0
+    else
+
+        case "$1" in
         --hilf|--hilfe|-hilf|-hilfe)  # Calls German help regardless of system settings for language.
             hilfe_seite
             ;;
         --help|-h|-help)
             if [ "${LANG::2}" == "de" ]; then
-                hilfe_seite
+            hilfe_seite
             else
-                help_page
+            help_page
             fi
             ;;
         --version|-\#)   # For possible bug reports.
             if [ "$1" = "--version" ]; then
-                echo -n "$PROG_NAME "
+            echo -n "$PROG_NAME "
             fi
             echo "$VERSION"
             exit 0
             ;;
+        -y|-j|--yes|--ja)
+            ;;
+        -l|--list|--find|-list|-find)
+            find -L . -type f -name "* *" -exec ls -1 {} \; 2> /dev/null |\
+            sed 's:^\./::' | sort | more
+            exit 0
+            ;;
         *)
            OLDSIGN="$1";;
-	esac
+        esac
+    fi
 else
         if [ "${LANG::2}" = "de" ]; then
-		ASK="Sollen Fragezeichen in den Dateinamen durch einen Unterstrich ersetzt werden? [j|n]: "
-		EXITMSG="Abbruch durch den Anwender."
-	else
-		ASK="Replace all question marks in file names with an underscore? [y|n]: "
-		EXITMSG="Canceled by user."
-	fi
-	while : ;
-	do
-		read -p "$ASK"
-		case "$REPLY" in
-			j|J|y|Y)
-				break
-				;;
-			n|N)
-				echo "$EXITMSG"
-				sleep 1
-				hilfe
-				;;
-		esac
-	done
+        ASK="Sollen Leerzeichen in den Dateinamen durch einen Unterstrich ersetzt werden? [j|n]: "
+        EXITMSG="Abbruch durch den Anwender."
+    else
+        ASK="Replace all blanks in file names with an underscore? [y|n]: "
+        EXITMSG="Canceled by user."
+    fi
+    while : ;
+    do
+        read -rp "$ASK"
+        case "$REPLY" in
+            j|J|y|Y)
+                break
+                ;;
+            n|N)
+                echo "$EXITMSG"
+                sleep 1
+                hilfe
+                ;;
+        esac
+    done
 
 fi
 
-
-( cd "$DIR"; for OLDNAME in *;
-do
-	[[ -f "$OLDNAME" ]] || continue  # If no normal file, then do not manipulate it.
-        if grep -Fcqs "$OLDSIGN" <<< "$OLDNAME"; then
-		if grep -cqs "[*?]" <<< "$OLDSIGN"; then
-			mask_signs
-		else
-			REPLSIGN="$OLDSIGN"
-		fi
-                NEWNAME=${OLDNAME//$REPLSIGN/$NEWSIGN}
-                if [ ${#NEWNAME} -lt 1 ]; then
-                	echo "Error: Can not replace file name \"$OLDNAME\" by \"$NEWNAME\"." > /dev/stderr
-                	continue  # File name of only one sign can not be replaced by nothing.
-                fi
-               	mv -iv "$OLDNAME" "$NEWNAME"
-        fi
-done )
+if [ "$MODE" != 'specificated_files' ]; then
+    ( cd "$DIR"
+      rename_files *
+    )
+else
+    rename_files "$@"
+fi
